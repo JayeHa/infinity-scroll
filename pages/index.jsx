@@ -1,5 +1,7 @@
 import axios from "axios";
+import { useRef } from "react";
 import { useInfiniteQuery } from "react-query";
+import { useObserver } from "../hooks/useObserver";
 
 const OFFSET = 30;
 
@@ -14,6 +16,9 @@ const getPokemonList = ({ pageParam = 0 }) =>
     .then(res => res?.data);
 
 const Index = () => {
+  // 바닥 ref를 위한 useRef 선언
+  const bottom = useRef(null);
+
   const {
     data, // 💡 data.pages를 갖고 있는 배열
     error, // error 객체
@@ -27,16 +32,24 @@ const Index = () => {
     getPokemonList, // fetch callback, 위 data를 불러올 함수
     {
       getNextPageParam: lastPage => {
-        const { next } = lastPage; // PoKeApi는 마지막 데이터가 없으면 next를 null로 준다
+        const { next } = lastPage;
+
         if (!next) return false;
 
-        // next 값에서 URL주소를 주고 있기 때문에 필요한 offset만 빼와서
-        // getPokemonList 함수에 pageParam으로 넘겨주자.
-        // console.log(new URL(next).searchParams.get("offset"));
         return Number(new URL(next).searchParams.get("offset"));
       }
     }
   );
+
+  // useObserver로 넘겨줄 callback, entry로 넘어오는 HTMLElement가
+  // isIntersecting이라면 무한 스크롤을 위한 fetchNextPage가 실행될 것이다.
+  const onIntersect = ([entry]) => entry.isIntersecting && fetchNextPage();
+
+  // useObserver로 bottom ref와 onIntersect를 넘겨 주자.
+  useObserver({
+    target: bottom,
+    onIntersect
+  });
 
   return (
     <div>
@@ -51,7 +64,9 @@ const Index = () => {
             ))}
           </div>
         ))}
-      <button onClick={() => fetchNextPage()}>더 불러오기</button>
+
+      <div ref={bottom} />
+
       {isFetchingNextPage && <p>계속 불러오는 중</p>}
     </div>
   );
