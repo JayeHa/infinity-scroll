@@ -1,6 +1,7 @@
 import axios from "axios";
-import { useRef } from "react";
+import { Fragment, useRef } from "react";
 import { useInfiniteQuery } from "react-query";
+import PokemonCard from "../components/PokemonCard";
 import { useObserver } from "../hooks/useObserver";
 
 const OFFSET = 30;
@@ -60,7 +61,9 @@ const Index = () => {
         data.pages.map((group, index) => (
           <div key={index}>
             {group.results.map(pokemon => (
-              <p key={pokemon.name}>{pokemon.name}</p>
+              <Fragment key={pokemon.name}>
+                <PokemonCard url={pokemon.url} name={pokemon.name} />
+              </Fragment>
             ))}
           </div>
         ))}
