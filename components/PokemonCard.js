@@ -8,7 +8,6 @@ const PokemonCard = ({ url, name }) => {
   const [visible, setVisible] = useState(false);
 
   const onIntersect = ([entry]) => {
-    console.log(entry.isIntersecting);
     entry.isIntersecting ? setVisible(true) : setVisible(false);
   };
 
