@@ -1,14 +1,20 @@
-import { useEffect } from "react";
+import { RefObject, useEffect } from "react";
 
 const useObserver = ({
-  target, // 감지할 대상, ref를 넘길 예정
-  onIntersect, // 감지 시 실행할 callback 함수
-  root = null, // 교차할 부모 요소, 아무것도 넘기지 않으면 document가 기본이다.
-  rootMargin = "0px", // root와 target이 감지하는 여백의 거리
-  threshold = 1.0, // 임계점. 1.0이면 root내에서 target이 100% 보여질 때 callback이 실행된다.
+  target,
+  onIntersect,
+  root = null,
+  rootMargin = "0px",
+  threshold = 1.0,
+}: {
+  target: RefObject<HTMLDivElement>; // 감지할 대상, ref를 넘길 예정
+  onIntersect: IntersectionObserverCallback; // 감지 시 실행할 callback 함수
+  root?: HTMLElement | null; // 교차할 부모 요소, 아무것도 넘기지 않으면 document가 기본이다.
+  rootMargin?: string; // root와 target이 감지하는 여백의 거리
+  threshold?: number; // 임계점. 1.0이면 root내에서 target이 100% 보여질 때 callback이 실행된다.
 }) => {
   useEffect(() => {
-    let observer;
+    let observer: IntersectionObserver;
 
     // 넘어오는 element가 있어야 observer를 생성할 수 있도록 한다.
     if (target && target.current) {
@@ -26,7 +32,7 @@ const useObserver = ({
 
     // observer를 사용하는 컴포넌트가 해제되면 observer 역시 꺼 주자.
     return () => observer && observer.disconnect();
-  }, [target, rootMargin, threshold]);
+  }, [target, rootMargin, threshold, onIntersect, root]);
 };
 
 export default useObserver;

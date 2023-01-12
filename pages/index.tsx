@@ -6,9 +6,6 @@ import { useGetPokemonList } from "../store/pokemon/hooks";
 const Index = () => {
   useMoveToSavedScroll();
 
-  // 바닥 ref를 위한 useRef 선언
-  const bottom = useRef(null);
-
   const {
     data, // 💡 data.pages를 갖고 있는 배열
     error, // error 객체
@@ -19,9 +16,13 @@ const Index = () => {
     status // 💡 loading, error, success 중 하나의 상태, string
   } = useGetPokemonList();
 
+  // 바닥 ref를 위한 useRef 선언
+  const bottom = useRef<HTMLDivElement>(null);
+
   // useObserver로 넘겨줄 callback, entry로 넘어오는 HTMLElement가
   // isIntersecting이라면 무한 스크롤을 위한 fetchNextPage가 실행될 것이다.
-  const onIntersect = ([entry]) => entry.isIntersecting && fetchNextPage();
+  const onIntersect: IntersectionObserverCallback = ([entry]) =>
+    entry.isIntersecting && fetchNextPage();
 
   // useObserver로 bottom ref와 onIntersect를 넘겨 주자.
   useObserver({
