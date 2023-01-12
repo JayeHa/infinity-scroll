@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState } from "react";
 import useLocalStorage from "use-local-storage";
-import { useObserver } from "../hooks/useObserver";
+import { useObserver } from "../hooks";
 
 const PokemonCard = ({ url, name }) => {
   // scrollY를 useLocalStorage로 세팅한다.

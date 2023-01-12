@@ -1,16 +1,10 @@
-import { Fragment, useEffect, useRef } from "react";
-import useLocalStorage from "use-local-storage";
+import { Fragment, useRef } from "react";
 import PokemonCard from "../components/PokemonCard";
-import { useObserver } from "../hooks/useObserver";
+import { useMoveToSavedScroll, useObserver } from "../hooks";
 import { useGetPokemonList } from "../store/pokemon/hooks";
 
 const Index = () => {
-  const [scrollY] = useLocalStorage("poke_list_scroll", 0);
-
-  useEffect(() => {
-    // 기본값이 "0"이기 때문에 스크롤 값이 저장됐을 때에만 window를 스크롤시킨다.
-    if (scrollY !== "0") window.scrollTo(0, Number(scrollY));
-  }, [scrollY]);
+  useMoveToSavedScroll();
 
   // 바닥 ref를 위한 useRef 선언
   const bottom = useRef(null);

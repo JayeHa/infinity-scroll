@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-export const useObserver = ({
+const useObserver = ({
   target, // 감지할 대상, ref를 넘길 예정
   onIntersect, // 감지 시 실행할 callback 함수
   root = null, // 교차할 부모 요소, 아무것도 넘기지 않으면 document가 기본이다.
@@ -28,3 +28,5 @@ export const useObserver = ({
     return () => observer && observer.disconnect();
   }, [target, rootMargin, threshold]);
 };
+
+export default useObserver;
