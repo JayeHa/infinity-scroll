@@ -32,7 +32,7 @@ const Index = () => {
   return (
     <div>
       {status === "loading" && <p>불러오는 중</p>}
-      {status === "error" && <p>{error.message}</p>}
+      {/* {status === "error" && <p>{error.message}</p>} */}
 
       {status === "success" &&
         data.pages.map((group, index) => (
