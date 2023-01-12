@@ -1,9 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState } from "react";
+import useLocalStorage from "use-local-storage";
 import { useObserver } from "../hooks/useObserver";
 
 const PokemonCard = ({ url, name }) => {
+  // scrollY를 useLocalStorage로 세팅한다.
+  const [scrollY, setScrollY] = useLocalStorage("poke_list_scroll", 0);
+
   const target = useRef(null);
   const [visible, setVisible] = useState(false);
 
@@ -18,7 +22,12 @@ const PokemonCard = ({ url, name }) => {
     .replace("/", "");
 
   return (
-    <Link href={`/pokemon/${id}`} key={id} style={{ display: "flex" }}>
+    <Link
+      href={`/pokemon/${id}`}
+      key={id}
+      style={{ display: "flex" }}
+      onClick={() => setScrollY(window.scrollY)}
+    >
       <article ref={target} style={{ minHeight: 300 }}>
         {visible && (
           <>
