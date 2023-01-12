@@ -1,21 +1,8 @@
-import axios from "axios";
 import { Fragment, useEffect, useRef } from "react";
-import { useInfiniteQuery } from "react-query";
 import useLocalStorage from "use-local-storage";
 import PokemonCard from "../components/PokemonCard";
 import { useObserver } from "../hooks/useObserver";
-
-const OFFSET = 30;
-
-const getPokemonList = ({ pageParam = 0 }) =>
-  axios
-    .get("https://pokeapi.co/api/v2/pokemon", {
-      params: {
-        limit: OFFSET,
-        offset: pageParam
-      }
-    })
-    .then(res => res?.data);
+import { useGetPokemonList } from "../store/pokemon/hooks";
 
 const Index = () => {
   const [scrollY] = useLocalStorage("poke_list_scroll", 0);
@@ -36,19 +23,7 @@ const Index = () => {
     isFetching, // 첫 페이지 fetching 여부, Boolean, 잘 안쓰인다
     isFetchingNextPage, // 추가 페이지 fetching 여부, Boolean
     status // 💡 loading, error, success 중 하나의 상태, string
-  } = useInfiniteQuery(
-    "pokemonList", // data의 이름
-    getPokemonList, // fetch callback, 위 data를 불러올 함수
-    {
-      getNextPageParam: lastPage => {
-        const { next } = lastPage;
-
-        if (!next) return false;
-
-        return Number(new URL(next).searchParams.get("offset"));
-      }
-    }
-  );
+  } = useGetPokemonList();
 
   // useObserver로 넘겨줄 callback, entry로 넘어오는 HTMLElement가
   // isIntersecting이라면 무한 스크롤을 위한 fetchNextPage가 실행될 것이다.
