@@ -2,9 +2,7 @@ import axios from "axios";
 import Image from "next/image";
 
 const Pokemon = ({ data }) => {
-  const { name, types, id, base_experience, abilities, order } = data;
-
-  console.log(data);
+  const { name, types, id } = data;
 
   return (
     <div>
@@ -20,8 +18,8 @@ const Pokemon = ({ data }) => {
       </h2>
 
       <div style={{ display: "flex", gap: "10px" }}>
-        {types.map(({ type }) => (
-          <span key={type.slot}>{type.name}</span>
+        {types.map(({ type }, index) => (
+          <span key={index}>{type.name}</span>
         ))}
       </div>
     </div>
